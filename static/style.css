@@ -1,0 +1,652 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #f5f7fb;
+    color: #333;
+    line-height: 1.6;
+}
+
+
+/* =====================================================
+   HEADER
+===================================================== */
+
+header {
+    background-color: #123c69;
+    color: white;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 15px 7%;
+
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+}
+
+
+/* College Logo / Name */
+
+.logo h2 {
+    font-size: 24px;
+    margin-bottom: 2px;
+}
+
+.logo p {
+    font-size: 13px;
+    color: #dbeafe;
+}
+
+
+/* Navigation */
+
+nav {
+    display: flex;
+    gap: 25px;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 500;
+
+    transition: 0.3s;
+}
+
+nav a:hover {
+    color: #ffd166;
+}
+
+
+/* =====================================================
+   HERO SECTION
+===================================================== */
+
+.hero {
+    min-height: 520px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    text-align: center;
+
+    padding: 60px 20px;
+
+    background:
+        linear-gradient(
+            rgba(18, 60, 105, 0.88),
+            rgba(18, 60, 105, 0.88)
+        ),
+        url("https://images.unsplash.com/photo-1562774053-701939374585")
+        center / cover no-repeat;
+}
+
+
+.hero-content {
+    max-width: 750px;
+    color: white;
+}
+
+
+.hero-content h1 {
+    font-size: 48px;
+    margin-bottom: 20px;
+}
+
+
+.hero-content p {
+    font-size: 20px;
+    margin-bottom: 30px;
+    color: #f0f4f8;
+}
+
+
+/* Apply Button */
+
+.apply-btn {
+    display: inline-block;
+
+    background-color: #ffd166;
+    color: #222;
+
+    text-decoration: none;
+
+    padding: 13px 30px;
+
+    border-radius: 6px;
+
+    font-size: 17px;
+    font-weight: bold;
+
+    transition: 0.3s;
+}
+
+.apply-btn:hover {
+    background-color: #ffb703;
+    transform: translateY(-2px);
+}
+
+
+/* =====================================================
+   COMMON SECTION SETTINGS
+===================================================== */
+
+section {
+    padding: 70px 7%;
+}
+
+section > h2 {
+    text-align: center;
+
+    font-size: 32px;
+
+    color: #123c69;
+
+    margin-bottom: 35px;
+}
+
+
+/* =====================================================
+   ABOUT SECTION
+===================================================== */
+
+#about {
+    background-color: white;
+}
+
+#about p {
+    max-width: 900px;
+
+    margin: auto;
+
+    text-align: center;
+
+    font-size: 17px;
+
+    color: #555;
+}
+
+
+/* =====================================================
+   COURSES SECTION
+===================================================== */
+
+#courses {
+    background-color: #f5f7fb;
+}
+
+
+.course-container {
+    max-width: 1100px;
+
+    margin: auto;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 25px;
+}
+
+
+.course-card {
+    background-color: white;
+
+    padding: 30px 20px;
+
+    text-align: center;
+
+    border-radius: 10px;
+
+    box-shadow:
+        0 5px 20px rgba(0, 0, 0, 0.08);
+
+    transition: 0.3s;
+}
+
+
+.course-card:hover {
+    transform: translateY(-5px);
+
+    box-shadow:
+        0 10px 25px rgba(0, 0, 0, 0.12);
+}
+
+
+.course-card h3 {
+    color: #123c69;
+
+    font-size: 20px;
+
+    margin-bottom: 10px;
+}
+
+
+.course-card p {
+    color: #666;
+
+    margin-bottom: 15px;
+}
+
+
+.course-card button {
+    border: none;
+
+    background-color: #123c69;
+
+    color: white;
+
+    padding: 9px 18px;
+
+    border-radius: 5px;
+
+    cursor: pointer;
+
+    font-size: 14px;
+
+    transition: 0.3s;
+}
+
+
+.course-card button:hover {
+    background-color: #0b2948;
+}
+
+
+/* =====================================================
+   ADMISSION SECTION
+===================================================== */
+
+#admission {
+    background-color: white;
+}
+
+
+form {
+    max-width: 950px;
+
+    margin: auto;
+
+    background-color: #f8fafc;
+
+    padding: 35px;
+
+    border-radius: 12px;
+
+    box-shadow:
+        0 5px 25px rgba(0, 0, 0, 0.08);
+}
+
+
+/* =====================================================
+   FIELDSET
+===================================================== */
+
+fieldset {
+    border: 1px solid #d6dce5;
+
+    border-radius: 8px;
+
+    padding: 25px;
+
+    margin-bottom: 25px;
+
+    background-color: white;
+}
+
+
+legend {
+    padding: 0 10px;
+
+    font-size: 18px;
+
+    font-weight: bold;
+
+    color: #123c69;
+}
+
+
+/* =====================================================
+   FORM LABELS
+===================================================== */
+
+label {
+    display: block;
+
+    margin-top: 15px;
+    margin-bottom: 6px;
+
+    font-size: 15px;
+
+    font-weight: 600;
+
+    color: #333;
+}
+
+
+/* =====================================================
+   INPUTS
+===================================================== */
+
+input,
+select,
+textarea {
+    width: 100%;
+
+    padding: 12px 13px;
+
+    border: 1px solid #cbd5e1;
+
+    border-radius: 6px;
+
+    font-size: 15px;
+
+    font-family: inherit;
+
+    background-color: white;
+
+    outline: none;
+
+    transition: 0.3s;
+}
+
+
+input:focus,
+select:focus,
+textarea:focus {
+    border-color: #123c69;
+
+    box-shadow:
+        0 0 0 3px rgba(18, 60, 105, 0.10);
+}
+
+
+textarea {
+    resize: vertical;
+
+    min-height: 100px;
+}
+
+
+/* =====================================================
+   FILE INPUT
+===================================================== */
+
+input[type="file"] {
+    padding: 10px;
+
+    background-color: #f8fafc;
+
+    cursor: pointer;
+}
+
+
+/* =====================================================
+   CHECKBOX
+===================================================== */
+
+.checkbox {
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 10px;
+
+    font-weight: normal;
+
+    line-height: 1.5;
+
+    cursor: pointer;
+}
+
+
+.checkbox input {
+    width: auto;
+
+    margin-top: 5px;
+
+    cursor: pointer;
+}
+
+
+/* =====================================================
+   FORM BUTTONS
+===================================================== */
+
+.form-buttons {
+    display: flex;
+
+    justify-content: center;
+
+    gap: 15px;
+
+    margin-top: 10px;
+}
+
+
+.form-buttons button {
+    border: none;
+
+    padding: 13px 25px;
+
+    border-radius: 6px;
+
+    font-size: 15px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition: 0.3s;
+}
+
+
+/* Clear Button */
+
+.form-buttons button[type="reset"] {
+    background-color: #e2e8f0;
+
+    color: #333;
+}
+
+
+.form-buttons button[type="reset"]:hover {
+    background-color: #cbd5e1;
+}
+
+
+/* Submit Button */
+
+.form-buttons button[type="submit"] {
+    background-color: #123c69;
+
+    color: white;
+}
+
+
+.form-buttons button[type="submit"]:hover {
+    background-color: #0b2948;
+
+    transform: translateY(-2px);
+}
+
+
+/* =====================================================
+   CONTACT SECTION
+===================================================== */
+
+#contact {
+    background-color: #123c69;
+
+    color: white;
+
+    text-align: center;
+}
+
+
+#contact h2 {
+    color: white;
+}
+
+
+#contact p {
+    margin: 8px 0;
+
+    font-size: 16px;
+}
+
+
+/* =====================================================
+   FOOTER
+===================================================== */
+
+footer {
+    background-color: #0b2948;
+
+    color: #dbeafe;
+
+    text-align: center;
+
+    padding: 20px;
+}
+
+
+footer p {
+    margin: 4px 0;
+
+    font-size: 14px;
+}
+
+
+/* =====================================================
+   TABLET RESPONSIVE DESIGN
+===================================================== */
+
+@media (max-width: 900px) {
+
+    header {
+        flex-direction: column;
+
+        gap: 15px;
+
+        text-align: center;
+    }
+
+
+    nav {
+        flex-wrap: wrap;
+
+        justify-content: center;
+
+        gap: 15px;
+    }
+
+
+    .hero-content h1 {
+        font-size: 40px;
+    }
+
+
+    .course-container {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+}
+
+
+/* =====================================================
+   MOBILE RESPONSIVE DESIGN
+===================================================== */
+
+@media (max-width: 600px) {
+
+    header {
+        padding: 15px 5%;
+    }
+
+
+    .logo h2 {
+        font-size: 20px;
+    }
+
+
+    nav {
+        gap: 10px;
+    }
+
+
+    nav a {
+        font-size: 14px;
+    }
+
+
+    .hero {
+        min-height: 450px;
+
+        padding: 40px 20px;
+    }
+
+
+    .hero-content h1 {
+        font-size: 32px;
+    }
+
+
+    .hero-content p {
+        font-size: 16px;
+    }
+
+
+    section {
+        padding: 50px 5%;
+    }
+
+
+    section > h2 {
+        font-size: 26px;
+    }
+
+
+    .course-container {
+        grid-template-columns: 1fr;
+    }
+
+
+    form {
+        padding: 20px;
+    }
+
+
+    fieldset {
+        padding: 18px;
+    }
+
+
+    .form-buttons {
+        flex-direction: column;
+    }
+
+
+    .form-buttons button {
+        width: 100%;
+    }
+
+}

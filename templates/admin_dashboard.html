@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Admin Dashboard</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f7fb;
+            color: #333;
+        }
+
+        header {
+            background: #0066cc;
+            color: white;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 25px;
+        }
+
+        .logout {
+            background: white;
+            color: #0066cc;
+            padding: 10px 18px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        .container {
+            width: 95%;
+            max-width: 1400px;
+            margin: 30px auto;
+        }
+
+        .welcome {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+        }
+
+        .welcome h2 {
+            margin-top: 0;
+            color: #0066cc;
+        }
+
+        /* SEARCH AND FILTER */
+
+        .filter-box {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+        }
+
+        .filter-box h3 {
+            margin-top: 0;
+            color: #333;
+        }
+
+        .filter-form {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .filter-form input,
+        .filter-form select {
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 15px;
+        }
+
+        .search-input {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .filter-form select {
+            min-width: 180px;
+        }
+
+        .search-btn {
+            background: #0066cc;
+            color: white;
+            border: none;
+            padding: 12px 22px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        .search-btn:hover {
+            background: #004c99;
+        }
+
+        .clear-btn {
+            background: #777;
+            color: white;
+            padding: 12px 22px;
+            border-radius: 5px;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .clear-btn:hover {
+            background: #555;
+        }
+
+        /* TABLE */
+
+        .table-container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 1000px;
+        }
+
+        th {
+            background: #0066cc;
+            color: white;
+            padding: 12px;
+            text-align: left;
+        }
+
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        tr:hover {
+            background: #f5f9ff;
+        }
+
+        /* STATUS */
+
+        .status {
+            padding: 6px 10px;
+            border-radius: 5px;
+            font-weight: bold;
+            display: inline-block;
+        }
+
+        .approved {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .rejected {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .submitted {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        /* BUTTONS */
+
+        .actions {
+            display: flex;
+            gap: 5px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            border: none;
+            padding: 7px 10px;
+            border-radius: 4px;
+            color: white;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 13px;
+            display: inline-block;
+        }
+
+        .view {
+            background: #0066cc;
+        }
+
+        .approve {
+            background: #28a745;
+        }
+
+        .reject {
+            background: #dc3545;
+        }
+
+        .pending {
+            background: #f0ad4e;
+        }
+
+        .btn:hover {
+            opacity: 0.85;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 30px;
+            color: #777;
+            font-size: 18px;
+        }
+
+        /* MOBILE */
+
+        @media (max-width: 768px) {
+
+            header {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+
+            .container {
+                width: 95%;
+            }
+
+            .filter-form {
+                flex-direction: column;
+            }
+
+            .filter-form input,
+            .filter-form select,
+            .search-btn,
+            .clear-btn {
+                width: 100%;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<header>
+
+    <h1>Admin Dashboard</h1>
+
+    <a href="/admin/logout" class="logout">
+        Logout
+    </a>
+
+</header>
+
+
+<div class="container">
+
+    <!-- WELCOME -->
+
+    <div class="welcome">
+
+        <h2>Admission Applications</h2>
+
+        <p>
+            Welcome to the College Admission Administration Panel.
+            You can search, filter and manage student applications here.
+        </p>
+
+    </div>
+
+
+    <!-- SEARCH AND FILTER -->
+
+    <div class="filter-box">
+
+        <h3>Search & Filter Applications</h3>
+
+        <form
+            action="/admin/dashboard"
+            method="GET"
+            class="filter-form"
+        >
+
+            <!-- SEARCH -->
+
+            <input
+                type="text"
+                name="search"
+                class="search-input"
+                placeholder="Search Application Number or Student Name"
+                value="{{ search }}"
+            >
+
+
+            <!-- COURSE FILTER -->
+
+            <select name="course">
+
+                <option value="">
+                    All Courses
+                </option>
+
+                {% for item in courses %}
+
+                    <option
+                        value="{{ item['course'] }}"
+                        {% if selected_course == item['course'] %}
+                            selected
+                        {% endif %}
+                    >
+                        {{ item['course'] }}
+                    </option>
+
+                {% endfor %}
+
+            </select>
+
+
+            <!-- STATUS FILTER -->
+
+            <select name="status">
+
+                <option value="">
+                    All Status
+                </option>
+
+                <option
+                    value="Submitted"
+                    {% if selected_status == "Submitted" %}
+                        selected
+                    {% endif %}
+                >
+                    Submitted
+                </option>
+
+                <option
+                    value="Approved"
+                    {% if selected_status == "Approved" %}
+                        selected
+                    {% endif %}
+                >
+                    Approved
+                </option>
+
+                <option
+                    value="Rejected"
+                    {% if selected_status == "Rejected" %}
+                        selected
+                    {% endif %}
+                >
+                    Rejected
+                </option>
+
+            </select>
+
+
+            <button
+                type="submit"
+                class="search-btn"
+            >
+                Search
+            </button>
+
+
+            <a
+                href="/admin/dashboard"
+                class="clear-btn"
+            >
+                Clear
+            </a>
+
+        </form>
+
+    </div>
+
+
+    <!-- APPLICATION TABLE -->
+
+    <div class="table-container">
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>Application No.</th>
+
+                    <th>Student Name</th>
+
+                    <th>Mobile</th>
+
+                    <th>Email</th>
+
+                    <th>Course</th>
+
+                    <th>Status</th>
+
+                    <th>Action</th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                {% if applications %}
+
+                    {% for application in applications %}
+
+                    <tr>
+
+                        <td>
+                            {{ application['application_number'] }}
+                        </td>
+
+                        <td>
+                            {{ application['student_name'] }}
+                        </td>
+
+                        <td>
+                            {{ application['mobile'] }}
+                        </td>
+
+                        <td>
+                            {{ application['email'] }}
+                        </td>
+
+                        <td>
+                            {{ application['course'] }}
+                        </td>
+
+
+                        <!-- STATUS -->
+
+                        <td>
+
+                            {% if application['status'] == 'Approved' %}
+
+                                <span class="status approved">
+                                    Approved
+                                </span>
+
+                            {% elif application['status'] == 'Rejected' %}
+
+                                <span class="status rejected">
+                                    Rejected
+                                </span>
+
+                            {% else %}
+
+                                <span class="status submitted">
+                                    Submitted
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <!-- ACTIONS -->
+
+                        <td>
+
+                            <div class="actions">
+
+                                <!-- VIEW -->
+
+                                <a
+                                    href="/admin/application/{{ application['application_number'] }}"
+                                    class="btn view"
+                                >
+                                    View Details
+                                </a>
+
+
+                                <!-- APPROVE -->
+
+                                <form
+                                    action="/admin/update-status"
+                                    method="POST"
+                                >
+
+                                    <input
+                                        type="hidden"
+                                        name="application_number"
+                                        value="{{ application['application_number'] }}"
+                                    >
+
+                                    <input
+                                        type="hidden"
+                                        name="status"
+                                        value="Approved"
+                                    >
+
+                                    <button
+                                        type="submit"
+                                        class="btn approve"
+                                    >
+                                        Approve
+                                    </button>
+
+                                </form>
+
+
+                                <!-- REJECT -->
+
+                                <form
+                                    action="/admin/update-status"
+                                    method="POST"
+                                >
+
+                                    <input
+                                        type="hidden"
+                                        name="application_number"
+                                        value="{{ application['application_number'] }}"
+                                    >
+
+                                    <input
+                                        type="hidden"
+                                        name="status"
+                                        value="Rejected"
+                                    >
+
+                                    <button
+                                        type="submit"
+                                        class="btn reject"
+                                    >
+                                        Reject
+                                    </button>
+
+                                </form>
+
+
+                                <!-- PENDING / SUBMITTED -->
+
+                                <form
+                                    action="/admin/update-status"
+                                    method="POST"
+                                >
+
+                                    <input
+                                        type="hidden"
+                                        name="application_number"
+                                        value="{{ application['application_number'] }}"
+                                    >
+
+                                    <input
+                                        type="hidden"
+                                        name="status"
+                                        value="Submitted"
+                                    >
+
+                                    <button
+                                        type="submit"
+                                        class="btn pending"
+                                    >
+                                        Pending
+                                    </button>
+
+                                </form>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                {% else %}
+
+                    <tr>
+
+                        <td
+                            colspan="7"
+                            class="no-results"
+                        >
+                            No applications found.
+                        </td>
+
+                    </tr>
+
+                {% endif %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>
