@@ -1,9 +1,13 @@
 from flask import Flask, render_template, request, redirect, session, send_file
+
 import sqlite3
 import random
 import io
 import os
 import secrets
+
+import psycopg2
+from psycopg2.extras import RealDictCursor
 
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -27,26 +31,127 @@ from xml.sax.saxutils import escape
 app = Flask(__name__)
 
 # Secure session secret
-# You can later set COLLEGE_SECRET_KEY as an environment variable.
 app.secret_key = os.environ.get(
     "COLLEGE_SECRET_KEY",
     secrets.token_hex(32)
 )
 
+
+# ==========================================
+# DATABASE SETTINGS
+# ==========================================
+
+# Local SQLite database
 DATABASE = "database.db"
+
+# Render PostgreSQL database
+DATABASE_URL = os.environ.get("DATABASE_URL")
 
 
 # ==========================================
-# DATABASE CONNECTION
+# DATABASE CONNECTION CLASS
+# ==========================================
+
+class DatabaseConnection:
+
+    def __init__(self):
+
+        # If DATABASE_URL exists, use PostgreSQL.
+        # Otherwise, use SQLite.
+
+        self.is_postgres = bool(DATABASE_URL)
+
+        if self.is_postgres:
+
+            db_url = DATABASE_URL
+
+            # Some PostgreSQL URLs may start with postgres://
+            # psycopg2 expects postgresql://
+
+            if db_url.startswith("postgres://"):
+
+                db_url = (
+                    "postgresql://"
+                    + db_url[len("postgres://"):]
+                )
+
+            self.connection = psycopg2.connect(
+                db_url
+            )
+
+        else:
+
+            self.connection = sqlite3.connect(
+                DATABASE
+            )
+
+            self.connection.row_factory = sqlite3.Row
+
+
+    # --------------------------------------
+    # EXECUTE SQL QUERY
+    # --------------------------------------
+
+    def execute(
+        self,
+        query,
+        parameters=()
+    ):
+
+        if self.is_postgres:
+
+            # SQLite uses ?
+            # PostgreSQL uses %s
+
+            query = query.replace(
+                "?",
+                "%s"
+            )
+
+            cursor = self.connection.cursor(
+                cursor_factory=RealDictCursor
+            )
+
+            cursor.execute(
+                query,
+                parameters
+            )
+
+            return cursor
+
+        else:
+
+            return self.connection.execute(
+                query,
+                parameters
+            )
+
+
+    # --------------------------------------
+    # COMMIT
+    # --------------------------------------
+
+    def commit(self):
+
+        self.connection.commit()
+
+
+    # --------------------------------------
+    # CLOSE
+    # --------------------------------------
+
+    def close(self):
+
+        self.connection.close()
+
+
+# ==========================================
+# GET DATABASE CONNECTION
 # ==========================================
 
 def get_db_connection():
 
-    connection = sqlite3.connect(DATABASE)
-
-    connection.row_factory = sqlite3.Row
-
-    return connection
+    return DatabaseConnection()
 
 
 # ==========================================
@@ -57,75 +162,154 @@ def create_database():
 
     connection = get_db_connection()
 
-    # --------------------------------------
-    # APPLICATIONS TABLE
-    # --------------------------------------
 
-    connection.execute("""
-        CREATE TABLE IF NOT EXISTS applications (
+    # ======================================
+    # POSTGRESQL DATABASE
+    # ======================================
 
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
+    if connection.is_postgres:
 
-            application_number TEXT UNIQUE,
+        # ----------------------------------
+        # APPLICATIONS TABLE
+        # ----------------------------------
 
-            student_name TEXT NOT NULL,
+        connection.execute("""
+            CREATE TABLE IF NOT EXISTS applications (
 
-            dob TEXT NOT NULL,
+                id SERIAL PRIMARY KEY,
 
-            gender TEXT NOT NULL,
+                application_number TEXT UNIQUE,
 
-            mobile TEXT NOT NULL,
+                student_name TEXT NOT NULL,
 
-            email TEXT NOT NULL,
+                dob TEXT NOT NULL,
 
-            address TEXT NOT NULL,
+                gender TEXT NOT NULL,
 
-            district TEXT NOT NULL,
+                mobile TEXT NOT NULL,
 
-            state TEXT NOT NULL,
+                email TEXT NOT NULL,
 
-            pincode TEXT NOT NULL,
+                address TEXT NOT NULL,
 
-            school TEXT NOT NULL,
+                district TEXT NOT NULL,
 
-            tenth REAL NOT NULL,
+                state TEXT NOT NULL,
 
-            twelfth REAL NOT NULL,
+                pincode TEXT NOT NULL,
 
-            group_name TEXT NOT NULL,
+                school TEXT NOT NULL,
 
-            course TEXT NOT NULL,
+                tenth DOUBLE PRECISION NOT NULL,
 
-            parent_name TEXT NOT NULL,
+                twelfth DOUBLE PRECISION NOT NULL,
 
-            parent_mobile TEXT NOT NULL,
+                group_name TEXT NOT NULL,
 
-            status TEXT DEFAULT 'Submitted'
+                course TEXT NOT NULL,
 
-        )
-    """)
+                parent_name TEXT NOT NULL,
 
+                parent_mobile TEXT NOT NULL,
 
-    # --------------------------------------
-    # ADMIN USERS TABLE
-    # --------------------------------------
+                status TEXT DEFAULT 'Submitted'
 
-    connection.execute("""
-        CREATE TABLE IF NOT EXISTS admin_users (
-
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-
-            username TEXT UNIQUE NOT NULL,
-
-            password TEXT NOT NULL
-
-        )
-    """)
+            )
+        """)
 
 
-    # --------------------------------------
+        # ----------------------------------
+        # ADMIN USERS TABLE
+        # ----------------------------------
+
+        connection.execute("""
+            CREATE TABLE IF NOT EXISTS admin_users (
+
+                id SERIAL PRIMARY KEY,
+
+                username TEXT UNIQUE NOT NULL,
+
+                password TEXT NOT NULL
+
+            )
+        """)
+
+
+    # ======================================
+    # SQLITE DATABASE
+    # ======================================
+
+    else:
+
+        # ----------------------------------
+        # APPLICATIONS TABLE
+        # ----------------------------------
+
+        connection.execute("""
+            CREATE TABLE IF NOT EXISTS applications (
+
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+
+                application_number TEXT UNIQUE,
+
+                student_name TEXT NOT NULL,
+
+                dob TEXT NOT NULL,
+
+                gender TEXT NOT NULL,
+
+                mobile TEXT NOT NULL,
+
+                email TEXT NOT NULL,
+
+                address TEXT NOT NULL,
+
+                district TEXT NOT NULL,
+
+                state TEXT NOT NULL,
+
+                pincode TEXT NOT NULL,
+
+                school TEXT NOT NULL,
+
+                tenth REAL NOT NULL,
+
+                twelfth REAL NOT NULL,
+
+                group_name TEXT NOT NULL,
+
+                course TEXT NOT NULL,
+
+                parent_name TEXT NOT NULL,
+
+                parent_mobile TEXT NOT NULL,
+
+                status TEXT DEFAULT 'Submitted'
+
+            )
+        """)
+
+
+        # ----------------------------------
+        # ADMIN USERS TABLE
+        # ----------------------------------
+
+        connection.execute("""
+            CREATE TABLE IF NOT EXISTS admin_users (
+
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+
+                username TEXT UNIQUE NOT NULL,
+
+                password TEXT NOT NULL
+
+            )
+        """)
+
+
+    # ======================================
     # CREATE DEFAULT ADMIN
-    # --------------------------------------
+    # ======================================
 
     admin = connection.execute(
         """
@@ -137,10 +321,13 @@ def create_database():
     ).fetchone()
 
 
-    # Create admin only if it does not already exist
+    # Create admin only if it does not exist
+
     if admin is None:
 
-        hashed_password = generate_password_hash("admin123")
+        hashed_password = generate_password_hash(
+            "admin123"
+        )
 
         connection.execute(
             """
@@ -168,9 +355,34 @@ def create_database():
 
 def generate_application_number():
 
-    number = random.randint(10000, 99999)
+    while True:
 
-    return "APP2026" + str(number)
+        number = random.randint(
+            10000,
+            99999
+        )
+
+        application_number = (
+            "APP2026"
+            + str(number)
+        )
+
+        connection = get_db_connection()
+
+        existing = connection.execute(
+            """
+            SELECT id
+            FROM applications
+            WHERE application_number = ?
+            """,
+            (application_number,)
+        ).fetchone()
+
+        connection.close()
+
+        if existing is None:
+
+            return application_number
 
 
 # ==========================================
@@ -180,14 +392,19 @@ def generate_application_number():
 @app.route("/")
 def home():
 
-    return render_template("index.html")
+    return render_template(
+        "index.html"
+    )
 
 
 # ==========================================
 # SUBMIT ADMISSION APPLICATION
 # ==========================================
 
-@app.route("/submit", methods=["POST"])
+@app.route(
+    "/submit",
+    methods=["POST"]
+)
 def submit_application():
 
     student_name = request.form["studentName"]
@@ -224,14 +441,19 @@ def submit_application():
 
 
     # Generate application number
-    application_number = generate_application_number()
+
+    application_number = (
+        generate_application_number()
+    )
 
 
     # Connect to database
+
     connection = get_db_connection()
 
 
     # Insert application
+
     connection.execute("""
         INSERT INTO applications (
 
@@ -271,7 +493,25 @@ def submit_application():
 
         )
 
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        VALUES (
+            ?,
+            ?,
+            ?,
+            ?,
+            ?,
+            ?,
+            ?,
+            ?,
+            ?,
+            ?,
+            ?,
+            ?,
+            ?,
+            ?,
+            ?,
+            ?,
+            ?
+        )
 
     """, (
 
@@ -297,9 +537,9 @@ def submit_application():
 
         school,
 
-        tenth,
+        float(tenth),
 
-        twelfth,
+        float(twelfth),
 
         group_name,
 
@@ -317,9 +557,9 @@ def submit_application():
     connection.close()
 
 
-    # --------------------------------------
+    # ======================================
     # SUCCESS PAGE
-    # --------------------------------------
+    # ======================================
 
     return f"""
     <!DOCTYPE html>
@@ -422,17 +662,24 @@ def submit_application():
 @app.route("/status")
 def status():
 
-    return render_template("status.html")
+    return render_template(
+        "status.html"
+    )
 
 
 # ==========================================
 # CHECK APPLICATION STATUS
 # ==========================================
 
-@app.route("/check-status", methods=["POST"])
+@app.route(
+    "/check-status",
+    methods=["POST"]
+)
 def check_status():
 
-    application_number = request.form["application_number"]
+    application_number = request.form[
+        "application_number"
+    ]
 
 
     connection = get_db_connection()
@@ -473,26 +720,37 @@ def check_status():
 @app.route("/admin")
 def admin_login():
 
-    return render_template("admin_login.html")
+    return render_template(
+        "admin_login.html"
+    )
 
 
 # ==========================================
 # SECURE ADMIN LOGIN
 # ==========================================
 
-@app.route("/admin/login", methods=["POST"])
+@app.route(
+    "/admin/login",
+    methods=["POST"]
+)
 def admin_login_process():
 
-    username = request.form["username"].strip()
+    username = request.form[
+        "username"
+    ].strip()
 
-    password = request.form["password"]
+    password = request.form[
+        "password"
+    ]
 
 
     # Connect to database
+
     connection = get_db_connection()
 
 
     # Find admin username
+
     admin = connection.execute(
         """
         SELECT *
@@ -506,7 +764,8 @@ def admin_login_process():
     connection.close()
 
 
-    # Check username and hashed password
+    # Check username and password
+
     if admin and check_password_hash(
         admin["password"],
         password
@@ -516,9 +775,13 @@ def admin_login_process():
 
         session["admin_logged_in"] = True
 
-        session["admin_username"] = admin["username"]
+        session["admin_username"] = (
+            admin["username"]
+        )
 
-        return redirect("/admin/dashboard")
+        return redirect(
+            "/admin/dashboard"
+        )
 
 
     else:
@@ -537,12 +800,16 @@ def admin_login_process():
 def admin_dashboard():
 
     # Check admin login
-    if not session.get("admin_logged_in"):
+
+    if not session.get(
+        "admin_logged_in"
+    ):
 
         return redirect("/admin")
 
 
     # Search value
+
     search = request.args.get(
         "search",
         ""
@@ -550,6 +817,7 @@ def admin_dashboard():
 
 
     # Course filter
+
     course = request.args.get(
         "course",
         ""
@@ -557,6 +825,7 @@ def admin_dashboard():
 
 
     # Status filter
+
     status = request.args.get(
         "status",
         ""
@@ -567,6 +836,7 @@ def admin_dashboard():
 
 
     # Base query
+
     query = """
         SELECT *
         FROM applications
@@ -577,9 +847,9 @@ def admin_dashboard():
     parameters = []
 
 
-    # --------------------------------------
+    # ======================================
     # SEARCH
-    # --------------------------------------
+    # ======================================
 
     if search:
 
@@ -599,9 +869,9 @@ def admin_dashboard():
         )
 
 
-    # --------------------------------------
+    # ======================================
     # COURSE FILTER
-    # --------------------------------------
+    # ======================================
 
     if course:
 
@@ -609,12 +879,14 @@ def admin_dashboard():
             AND course = ?
         """
 
-        parameters.append(course)
+        parameters.append(
+            course
+        )
 
 
-    # --------------------------------------
+    # ======================================
     # STATUS FILTER
-    # --------------------------------------
+    # ======================================
 
     if status:
 
@@ -622,10 +894,13 @@ def admin_dashboard():
             AND status = ?
         """
 
-        parameters.append(status)
+        parameters.append(
+            status
+        )
 
 
     # Latest applications first
+
     query += """
         ORDER BY id DESC
     """
@@ -637,9 +912,9 @@ def admin_dashboard():
     ).fetchall()
 
 
-    # --------------------------------------
+    # ======================================
     # GET COURSES
-    # --------------------------------------
+    # ======================================
 
     courses = connection.execute(
         """
@@ -679,7 +954,10 @@ def admin_dashboard():
 def update_status():
 
     # Check admin login
-    if not session.get("admin_logged_in"):
+
+    if not session.get(
+        "admin_logged_in"
+    ):
 
         return redirect("/admin")
 
@@ -695,6 +973,7 @@ def update_status():
 
 
     # Allowed status values
+
     allowed_statuses = [
         "Submitted",
         "Approved",
@@ -703,6 +982,7 @@ def update_status():
 
 
     # Security check
+
     if new_status not in allowed_statuses:
 
         return redirect(
@@ -748,7 +1028,10 @@ def application_details(
 ):
 
     # Check admin login
-    if not session.get("admin_logged_in"):
+
+    if not session.get(
+        "admin_logged_in"
+    ):
 
         return redirect("/admin")
 
@@ -771,7 +1054,10 @@ def application_details(
 
     if application is None:
 
-        return "Application not found.", 404
+        return (
+            "Application not found.",
+            404
+        )
 
 
     return render_template(
@@ -792,12 +1078,16 @@ def download_application(
 ):
 
     # Check admin login
-    if not session.get("admin_logged_in"):
+
+    if not session.get(
+        "admin_logged_in"
+    ):
 
         return redirect("/admin")
 
 
     # Get application
+
     connection = get_db_connection()
 
 
@@ -815,14 +1105,18 @@ def download_application(
 
 
     # Application not found
+
     if application is None:
 
-        return "Application not found.", 404
+        return (
+            "Application not found.",
+            404
+        )
 
 
-    # --------------------------------------
+    # ======================================
     # CREATE PDF IN MEMORY
-    # --------------------------------------
+    # ======================================
 
     pdf_buffer = io.BytesIO()
 
@@ -850,9 +1144,9 @@ def download_application(
     elements = []
 
 
-    # --------------------------------------
+    # ======================================
     # TITLE
-    # --------------------------------------
+    # ======================================
 
     elements.append(
         Paragraph(
@@ -867,9 +1161,9 @@ def download_application(
     )
 
 
-    # --------------------------------------
+    # ======================================
     # APPLICATION NUMBER
-    # --------------------------------------
+    # ======================================
 
     elements.append(
         Paragraph(
@@ -906,9 +1200,9 @@ def download_application(
     )
 
 
-    # --------------------------------------
+    # ======================================
     # STUDENT INFORMATION
-    # --------------------------------------
+    # ======================================
 
     elements.append(
         Paragraph(
@@ -968,7 +1262,6 @@ def download_application(
     ]
 
 
-    # Escape values for ReportLab
     student_data = [
 
         [
@@ -1033,9 +1326,9 @@ def download_application(
     )
 
 
-    # --------------------------------------
+    # ======================================
     # EDUCATIONAL INFORMATION
-    # --------------------------------------
+    # ======================================
 
     elements.append(
         Paragraph(
@@ -1139,9 +1432,9 @@ def download_application(
     )
 
 
-    # --------------------------------------
+    # ======================================
     # PARENT INFORMATION
-    # --------------------------------------
+    # ======================================
 
     elements.append(
         Paragraph(
@@ -1231,19 +1524,21 @@ def download_application(
     )
 
 
-    # --------------------------------------
+    # ======================================
     # BUILD PDF
-    # --------------------------------------
+    # ======================================
 
-    document.build(elements)
+    document.build(
+        elements
+    )
 
 
     pdf_buffer.seek(0)
 
 
-    # --------------------------------------
+    # ======================================
     # DOWNLOAD PDF
-    # --------------------------------------
+    # ======================================
 
     return send_file(
 
@@ -1274,16 +1569,28 @@ def admin_logout():
 
 
 # ==========================================
+# CREATE DATABASE ON STARTUP
+# ==========================================
+
+# IMPORTANT:
+# This must run outside the __main__ block
+# because Render uses Gunicorn.
+#
+# Gunicorn imports app.py instead of running
+# "python app.py".
+#
+# Therefore this creates the PostgreSQL
+# tables automatically on Render.
+
+create_database()
+
+
+# ==========================================
 # START FLASK APPLICATION
 # ==========================================
 
 if __name__ == "__main__":
 
-    # Create database and tables
-    create_database()
-
-
-    # Start Flask
     app.run(
 
         host="127.0.0.1",
