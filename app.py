@@ -1584,7 +1584,333 @@ def admin_logout():
 
 create_database()
 
+@app.route("/course/<course_name>")
+def course_details(course_name):
 
+    courses = {
+
+    "data-science": {
+        "name": "B.Sc Data Science",
+        "duration": "3 Years",
+        "overview": "B.Sc Data Science provides students with a foundation in programming, statistics, data analysis, databases, data visualization and emerging data-driven technologies. The programme develops analytical thinking and practical skills for working with data.",
+        "eligibility": "Candidates who have passed Higher Secondary / 10+2 or an equivalent examination with the required subjects and marks prescribed by the University and College are eligible to apply.",
+        "subjects": [
+            "Programming with Python",
+            "Statistics",
+            "Database Management Systems",
+            "Data Structures",
+            "Data Visualization",
+            "Machine Learning",
+            "Artificial Intelligence",
+            "Big Data Fundamentals",
+            "Web Technologies",
+            "Data Analytics"
+        ],
+        "benefits": [
+            "Develop strong programming and analytical skills.",
+            "Learn to collect, process and interpret data.",
+            "Gain practical knowledge of Python and databases.",
+            "Develop data visualization skills.",
+            "Understand the fundamentals of machine learning and artificial intelligence.",
+            "Work on practical data-oriented projects."
+        ],
+        "careers": [
+            "Data Analyst",
+            "Junior Data Scientist",
+            "Business Analyst",
+            "Data Visualization Analyst",
+            "Database Analyst",
+            "Data Associate"
+        ]
+    },
+
+    "computer-science": {
+        "name": "B.Sc Computer Science",
+        "duration": "3 Years",
+        "overview": "B.Sc Computer Science provides students with fundamental and advanced knowledge of programming, algorithms, databases, computer networks, software development and modern computing technologies.",
+        "eligibility": "Candidates who have passed Higher Secondary / 10+2 or an equivalent examination with the required qualification and subjects prescribed by the University and College are eligible to apply.",
+        "subjects": [
+            "Programming in C",
+            "Object-Oriented Programming",
+            "Data Structures",
+            "Database Management Systems",
+            "Computer Networks",
+            "Operating Systems",
+            "Computer Architecture",
+            "Web Technologies",
+            "Software Engineering",
+            "Python Programming"
+        ],
+        "benefits": [
+            "Develop strong programming and problem-solving abilities.",
+            "Understand algorithms and data structures.",
+            "Gain practical knowledge of databases and networks.",
+            "Learn software and web development concepts.",
+            "Develop skills in modern programming languages.",
+            "Build practical projects and applications."
+        ],
+        "careers": [
+            "Software Developer",
+            "Web Developer",
+            "System Analyst",
+            "Database Administrator",
+            "Application Developer",
+            "Technical Support Executive"
+        ]
+    },
+
+    "bca": {
+        "name": "BCA",
+        "duration": "3 Years",
+        "overview": "Bachelor of Computer Applications focuses on computer applications, programming, software development, databases, web technologies and information technology. The programme combines theoretical knowledge with practical application development.",
+        "eligibility": "Candidates who have passed Higher Secondary / 10+2 or an equivalent examination with the qualification prescribed by the University and College are eligible to apply.",
+        "subjects": [
+            "Programming Fundamentals",
+            "C Programming",
+            "Python Programming",
+            "Data Structures",
+            "Database Management Systems",
+            "Web Development",
+            "Computer Networks",
+            "Operating Systems",
+            "Software Engineering",
+            "Mobile Application Concepts"
+        ],
+        "benefits": [
+            "Develop practical programming skills.",
+            "Learn application and web development.",
+            "Understand database management.",
+            "Gain knowledge of software development processes.",
+            "Develop computer application skills.",
+            "Work on practical software projects."
+        ],
+        "careers": [
+            "Software Developer",
+            "Web Developer",
+            "Application Developer",
+            "Database Administrator",
+            "IT Support Executive",
+            "System Administrator"
+        ]
+    },
+
+    "zoology": {
+        "name": "Zoology",
+        "duration": "3 Years",
+        "overview": "The Zoology programme provides knowledge about animals, their structure, physiology, behaviour, evolution, ecology and biodiversity. Students develop scientific observation and laboratory skills through practical learning.",
+        "eligibility": "Candidates who have completed Higher Secondary / 10+2 with the required science subjects and qualification prescribed by the University and College are eligible to apply.",
+        "subjects": [
+            "Animal Diversity",
+            "Cell Biology",
+            "Animal Physiology",
+            "Genetics",
+            "Developmental Biology",
+            "Evolution",
+            "Ecology",
+            "Environmental Biology",
+            "Biochemistry",
+            "Molecular Biology"
+        ],
+        "benefits": [
+            "Develop knowledge of animal biology and biodiversity.",
+            "Understand animal structure and physiology.",
+            "Develop laboratory and observation skills.",
+            "Learn ecological and environmental concepts.",
+            "Gain practical experience in biological studies.",
+            "Build a foundation for higher studies and research."
+        ],
+        "careers": [
+            "Research Assistant",
+            "Laboratory Assistant",
+            "Wildlife Conservation Assistant",
+            "Environmental Assistant",
+            "Biology Educator",
+            "Laboratory Technician"
+        ]
+    },
+
+    "bcom": {
+        "name": "B.Com",
+        "duration": "3 Years",
+        "overview": "B.Com provides students with knowledge of accounting, commerce, finance, business management, taxation and business practices. The programme develops financial understanding and professional business skills.",
+        "eligibility": "Candidates who have passed Higher Secondary / 10+2 or an equivalent examination with the required qualification prescribed by the University and College are eligible to apply.",
+        "subjects": [
+            "Financial Accounting",
+            "Business Economics",
+            "Business Management",
+            "Corporate Accounting",
+            "Cost Accounting",
+            "Income Tax",
+            "Business Law",
+            "Marketing Management",
+            "Banking and Financial Services",
+            "Entrepreneurship"
+        ],
+        "benefits": [
+            "Develop accounting and financial skills.",
+            "Understand business and commercial activities.",
+            "Gain knowledge of taxation and business law.",
+            "Develop financial management skills.",
+            "Improve business communication.",
+            "Build a foundation for professional commerce careers."
+        ],
+        "careers": [
+            "Accountant",
+            "Accounts Executive",
+            "Finance Assistant",
+            "Banking Executive",
+            "Business Executive",
+            "Tax Assistant"
+        ]
+    },
+
+    "bcom-ca": {
+        "name": "B.Com CA",
+        "duration": "3 Years",
+        "overview": "B.Com Computer Applications combines commerce education with computer applications. The programme provides knowledge of accounting, finance, business operations and computer-based applications used in modern organisations.",
+        "eligibility": "Candidates who have passed Higher Secondary / 10+2 or an equivalent examination with the qualification prescribed by the University and College are eligible to apply.",
+        "subjects": [
+            "Financial Accounting",
+            "Corporate Accounting",
+            "Business Economics",
+            "Computer Fundamentals",
+            "Programming Fundamentals",
+            "Database Management",
+            "Computer Applications in Business",
+            "Business Law",
+            "Income Tax",
+            "Financial Management"
+        ],
+        "benefits": [
+            "Combine commerce knowledge with computer skills.",
+            "Develop accounting and financial abilities.",
+            "Learn business-oriented computer applications.",
+            "Gain database and software skills.",
+            "Understand modern accounting environments.",
+            "Develop analytical and numerical abilities."
+        ],
+        "careers": [
+            "Accountant",
+            "Accounts Executive",
+            "Finance Assistant",
+            "Computer Operator",
+            "Business Executive",
+            "Office Administrator"
+        ]
+    },
+
+    "mathematics": {
+        "name": "B.Sc Mathematics",
+        "duration": "3 Years",
+        "overview": "B.Sc Mathematics develops logical reasoning, analytical thinking and mathematical problem-solving abilities. The programme provides a strong foundation in pure and applied mathematical concepts.",
+        "eligibility": "Candidates who have completed Higher Secondary / 10+2 with Mathematics and the qualification prescribed by the University and College are eligible to apply.",
+        "subjects": [
+            "Algebra",
+            "Calculus",
+            "Differential Equations",
+            "Integral Calculus",
+            "Analytical Geometry",
+            "Statistics",
+            "Number Theory",
+            "Discrete Mathematics",
+            "Operations Research",
+            "Mathematical Methods"
+        ],
+        "benefits": [
+            "Develop logical and analytical thinking.",
+            "Strengthen mathematical problem-solving skills.",
+            "Develop quantitative reasoning abilities.",
+            "Understand mathematical modelling.",
+            "Build a foundation for higher studies.",
+            "Apply mathematical concepts to practical problems."
+        ],
+        "careers": [
+            "Mathematics Educator",
+            "Data Analyst",
+            "Statistical Assistant",
+            "Research Assistant",
+            "Banking Executive",
+            "Operations Research Assistant"
+        ]
+    },
+
+    "english": {
+        "name": "B.A English",
+        "duration": "3 Years",
+        "overview": "B.A English develops language proficiency, communication, literature, writing, critical thinking and creative expression. The programme helps students develop effective written and verbal communication skills.",
+        "eligibility": "Candidates who have passed Higher Secondary / 10+2 or an equivalent examination with the qualification prescribed by the University and College are eligible to apply.",
+        "subjects": [
+            "English Literature",
+            "British Literature",
+            "Indian Writing in English",
+            "American Literature",
+            "Literary Criticism",
+            "English Grammar",
+            "Communication Skills",
+            "Creative Writing",
+            "Language and Linguistics",
+            "Professional Communication"
+        ],
+        "benefits": [
+            "Improve English language proficiency.",
+            "Develop professional writing skills.",
+            "Strengthen public speaking and presentation abilities.",
+            "Develop critical and creative thinking.",
+            "Gain knowledge of literature and literary studies.",
+            "Improve communication skills for professional environments."
+        ],
+        "careers": [
+            "Content Writer",
+            "English Teacher",
+            "Editor",
+            "Copywriter",
+            "Proofreader",
+            "Communication Executive"
+        ]
+    },
+
+    "chemistry": {
+        "name": "B.Sc Chemistry",
+        "duration": "3 Years",
+        "overview": "B.Sc Chemistry provides students with knowledge of chemical principles, laboratory techniques, chemical reactions, materials and analytical methods. The programme combines theoretical learning with practical laboratory experience.",
+        "eligibility": "Candidates who have completed Higher Secondary / 10+2 with the required science subjects and qualification prescribed by the University and College are eligible to apply.",
+        "subjects": [
+            "Inorganic Chemistry",
+            "Organic Chemistry",
+            "Physical Chemistry",
+            "Analytical Chemistry",
+            "Biochemistry",
+            "Environmental Chemistry",
+            "Polymer Chemistry",
+            "Spectroscopy",
+            "Chemical Kinetics",
+            "Laboratory Techniques"
+        ],
+        "benefits": [
+            "Develop practical laboratory skills.",
+            "Understand chemical reactions and principles.",
+            "Learn analytical and organic chemistry.",
+            "Develop scientific observation skills.",
+            "Gain experience with laboratory techniques.",
+            "Build a foundation for higher studies and research."
+        ],
+        "careers": [
+            "Laboratory Assistant",
+            "Quality Control Assistant",
+            "Research Assistant",
+            "Chemical Laboratory Technician",
+            "Production Assistant",
+            "Quality Assurance Assistant"
+        ]
+    }
+}
+
+    course = courses.get(course_name)
+
+    if not course:
+        return "Course not found", 404
+
+    return render_template("course_details.html", course=course)
 # ==========================================
 # START FLASK APPLICATION
 # ==========================================

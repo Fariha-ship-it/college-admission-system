@@ -650,3 +650,307 @@ footer p {
     }
 
 }
+.course-details-page {
+    min-height: 100vh;
+    padding: 40px 20px;
+}
+
+.course-details-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 35px;
+    border-radius: 20px;
+    background: white;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+}
+
+.back-button {
+    display: inline-block;
+    margin-bottom: 25px;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.course-header {
+    text-align: center;
+    margin-bottom: 35px;
+}
+
+.course-header h1 {
+    font-size: 36px;
+    margin-bottom: 10px;
+}
+
+.course-header p {
+    font-size: 18px;
+}
+
+.details-section {
+    margin-bottom: 30px;
+}
+
+.details-section h2 {
+    margin-bottom: 15px;
+}
+
+.details-section p {
+    line-height: 1.8;
+}
+
+.details-section ul {
+    padding-left: 25px;
+}
+
+.details-section li {
+    margin-bottom: 12px;
+    line-height: 1.6;
+}
+
+.apply-section {
+    text-align: center;
+    margin-top: 35px;
+}
+
+.apply-course-button {
+    display: inline-block;
+    padding: 13px 30px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+@media (max-width: 600px) {
+
+    .course-details-container {
+        padding: 25px 18px;
+    }
+
+    .course-header h1 {
+        font-size: 28px;
+    }
+}
+/* =========================================
+   COURSE DETAILS PAGE
+   ========================================= */
+
+.course-details-page {
+    min-height: 100vh;
+    padding: 50px 20px;
+}
+
+.course-details-container {
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
+    background: #ffffff;
+    border-radius: 24px;
+    padding: 45px;
+    box-shadow: 0 15px 45px rgba(0, 0, 0, 0.10);
+}
+
+
+/* Back Button */
+
+.back-button {
+    display: inline-block;
+    margin-bottom: 30px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 15px;
+}
+
+
+/* Course Header */
+
+.course-header {
+    text-align: center;
+    padding: 25px 20px 40px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.course-label {
+    display: inline-block;
+    padding: 7px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    margin-bottom: 15px;
+}
+
+.course-header h1 {
+    font-size: 42px;
+    margin: 0 0 12px;
+}
+
+.course-duration {
+    font-size: 17px;
+    margin: 0;
+    font-weight: 600;
+}
+
+
+/* Sections */
+
+.details-section {
+    padding: 35px 0;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.details-section h2 {
+    font-size: 27px;
+    margin-bottom: 18px;
+}
+
+.details-section p {
+    font-size: 16px;
+    line-height: 1.8;
+}
+
+
+/* Subjects */
+
+.subject-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+}
+
+.subject-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 15px;
+    border-radius: 10px;
+    background: #f7f8fa;
+    font-weight: 500;
+}
+
+.subject-number {
+    min-width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+
+/* Benefits */
+
+.benefits-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+}
+
+.benefit-card {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    padding: 20px;
+    border-radius: 12px;
+    background: #f7f8fa;
+}
+
+.benefit-card p {
+    margin: 0;
+    line-height: 1.6;
+}
+
+.benefit-icon {
+    width: 28px;
+    height: 28px;
+    min-width: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
+
+/* Career Opportunities */
+
+.career-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+}
+
+.career-card {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 18px;
+    border-radius: 12px;
+    background: #f7f8fa;
+    font-weight: 600;
+}
+
+.career-icon {
+    font-size: 12px;
+}
+
+
+/* Apply Section */
+
+.apply-section {
+    text-align: center;
+    padding: 45px 20px 15px;
+}
+
+.apply-section h2 {
+    margin-bottom: 10px;
+}
+
+.apply-section p {
+    margin-bottom: 25px;
+}
+
+.apply-course-button {
+    display: inline-block;
+    padding: 14px 35px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: 700;
+    transition: 0.3s;
+}
+
+.apply-course-button:hover {
+    transform: translateY(-2px);
+}
+
+
+/* Mobile */
+
+@media (max-width: 768px) {
+
+    .course-details-page {
+        padding: 25px 12px;
+    }
+
+    .course-details-container {
+        padding: 25px 18px;
+        border-radius: 18px;
+    }
+
+    .course-header h1 {
+        font-size: 30px;
+    }
+
+    .subject-grid,
+    .benefits-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .career-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .details-section h2 {
+        font-size: 23px;
+    }
+}

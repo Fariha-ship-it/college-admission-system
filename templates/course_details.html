@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>{{ course.name }} | Course Details</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+    <div class="course-details-page">
+
+        <div class="course-details-container">
+
+            <!-- Back Button -->
+            <a href="/" class="back-button">
+                ← Back to Courses
+            </a>
+
+
+            <!-- Course Header -->
+            <div class="course-header">
+
+                <span class="course-label">
+                    UNDERGRADUATE PROGRAMME
+                </span>
+
+                <h1>{{ course.name }}</h1>
+
+                <p class="course-duration">
+                    Duration: {{ course.duration }}
+                </p>
+
+            </div>
+
+
+            <!-- Overview -->
+            <section class="details-section">
+
+                <h2>Course Overview</h2>
+
+                <p>
+                    {{ course.overview }}
+                </p>
+
+            </section>
+
+
+            <!-- Eligibility -->
+            <section class="details-section">
+
+                <h2>Eligibility</h2>
+
+                <p>
+                    {{ course.eligibility }}
+                </p>
+
+            </section>
+
+
+            <!-- Subjects -->
+            <section class="details-section">
+
+                <h2>Course Subjects</h2>
+
+                <div class="subject-grid">
+
+                    {% for subject in course.subjects %}
+
+                    <div class="subject-item">
+
+                        <span class="subject-number">
+                            {{ loop.index }}
+                        </span>
+
+                        <span>
+                            {{ subject }}
+                        </span>
+
+                    </div>
+
+                    {% endfor %}
+
+                </div>
+
+            </section>
+
+
+            <!-- Benefits -->
+            <section class="details-section">
+
+                <h2>Course Benefits</h2>
+
+                <div class="benefits-grid">
+
+                    {% for benefit in course.benefits %}
+
+                    <div class="benefit-card">
+
+                        <div class="benefit-icon">
+                            ✓
+                        </div>
+
+                        <p>
+                            {{ benefit }}
+                        </p>
+
+                    </div>
+
+                    {% endfor %}
+
+                </div>
+
+            </section>
+
+
+            <!-- Careers -->
+            <section class="details-section">
+
+                <h2>Career Opportunities</h2>
+
+                <div class="career-grid">
+
+                    {% for career in course.careers %}
+
+                    <div class="career-card">
+
+                        <span class="career-icon">
+                            ◆
+                        </span>
+
+                        <span>
+                            {{ career }}
+                        </span>
+
+                    </div>
+
+                    {% endfor %}
+
+                </div>
+
+            </section>
+
+
+            <!-- Apply Section -->
+            <section class="apply-section">
+
+                <h2>Ready to Begin Your Journey?</h2>
+
+                <p>
+                    Take the next step towards your academic and
+                    professional goals.
+                </p>
+
+                <a href="/#apply"
+                   class="apply-course-button">
+                    Apply Now
+                </a>
+
+            </section>
+
+
+        </div>
+
+    </div>
+
+</body>
+
+</html>
